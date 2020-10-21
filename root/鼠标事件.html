@@ -1,0 +1,30 @@
+<h4 id="事件顺序">事件顺序</h4>
+<pre><code class="language-js">
+&lt;input
+onmousedown=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+onmouseup=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+onclick=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+oncontextmenu=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+ondblclick=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+value=<span class="hljs-string">&quot;Click me with the right or the left mouse button&quot;</span>
+type=<span class="hljs-string">&quot;button&quot;</span>&gt;
+</code></pre>
+<h4 id="组合键">组合键</h4>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>Alt+Shift+Click on me!<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+<pre><code class="language-js">button.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">if</span> (event.altKey &amp;&amp; event.shiftKey) {
+    alert(<span class="hljs-string">&quot;Hooray!&quot;</span>);
+  }
+};</code></pre>
+<h4 id="坐标：clientxy，pagexy">坐标：clientX/Y，pageX/Y</h4>
+<ol>
+<li>相对于窗口的坐标：clientX 和 clientY。</li>
+<li>相对于文档的坐标：pageX 和 pageY。</li>
+</ol>
+<h4 id="防止在鼠标按下时的选择">防止在鼠标按下时的选择</h4>
+<p>双击下面的文本，除了我们的处理程序外，还会选择文本</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;dblclick&#x27;)&quot;</span>&gt;</span>Double-click me<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></code></pre>
+<p>最合理的方式是防止浏览器对 mousedown 进行操作</p>
+<pre><code class="language-html">Before...
+<span class="hljs-tag">&lt;<span class="hljs-name">b</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> <span class="hljs-attr">onmousedown</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span> Double-click me <span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>
+...After</code></pre>

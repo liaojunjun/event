@@ -219,7 +219,7 @@
         .hljs-addition{background:#dfd}
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
-        .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000;}
+        .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -233,7 +233,7 @@
             offsetWidth: dom.offsetWidth,
             BoundingClientRect: dom.getBoundingClientRect(),
           });
-          let openHash = true;
+          let openHash = false;
           function viewFieldset() {
             const hash = decode(location.hash);
             if(openHash && hash &&$(`fieldset${hash}`)) {
@@ -244,45 +244,89 @@
             }
           }
           window.onhashchange = viewFieldset;
-          window.onload  = viewFieldset;
+          window.onload  = ()=>{
+            viewFieldset();
+            setATarget();
+          };
           
           function toggleHash() {
             openHash = !openHash;
             viewFieldset();
-            $('.toggle-hash-btn').innerText = openHash ? '关闭hash' : '开启hash';
+            $('.toggle-hash-btn button').innerText = openHash ? '关闭专注模式' : '开启专注模式';
+          }
+          function setATarget() {
+            $$('#page a').forEach(a=>a.target = '_blank');
           }
     </script>
 </head>
 
 <body>
-  <button class="toggle-hash-btn" onclick="toggleHash()">关闭hash</button><div id="page">
-      <fieldset id='鼠标事件'>
+  <div class="toggle-hash-btn">
+    <button  onclick="toggleHash()">开启专注模式</button>
+     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+  </div><div id="page">
+      <fieldset id='_eha8yE'>
       <legend>鼠标事件</legend>
-      
+      <h4 id="事件顺序">事件顺序</h4>
+<pre><code class="language-js">
+&lt;input
+onmousedown=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+onmouseup=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+onclick=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+oncontextmenu=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+ondblclick=<span class="hljs-string">&quot;return logMouse(event)&quot;</span>
+value=<span class="hljs-string">&quot;Click me with the right or the left mouse button&quot;</span>
+type=<span class="hljs-string">&quot;button&quot;</span>&gt;
+</code></pre>
+<h4 id="组合键">组合键</h4>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>Alt+Shift+Click on me!<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+<pre><code class="language-js">button.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">if</span> (event.altKey &amp;&amp; event.shiftKey) {
+    alert(<span class="hljs-string">&quot;Hooray!&quot;</span>);
+  }
+};</code></pre>
+<h4 id="坐标：clientxy，pagexy">坐标：clientX/Y，pageX/Y</h4>
+<ol>
+<li>相对于窗口的坐标：clientX 和 clientY。</li>
+<li>相对于文档的坐标：pageX 和 pageY。</li>
+</ol>
+<h4 id="防止在鼠标按下时的选择">防止在鼠标按下时的选择</h4>
+<p>双击下面的文本，除了我们的处理程序外，还会选择文本</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;dblclick&#x27;)&quot;</span>&gt;</span>Double-click me<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></code></pre>
+<p>最合理的方式是防止浏览器对 mousedown 进行操作</p>
+<pre><code class="language-html">Before...
+<span class="hljs-tag">&lt;<span class="hljs-name">b</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> <span class="hljs-attr">onmousedown</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span> Double-click me <span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>
+...After</code></pre>
+
       </fieldset>
       
-      <fieldset id='移动鼠标'>
+      <fieldset id='_s67WLo'>
       <legend>移动鼠标</legend>
-      
+      <h4 id="事件-mouseovermouseout，relatedtarget">事件 mouseover/mouseout，relatedTarget</h4>
+<blockquote>
+<p>这些事件很特别，因为它们具有 relatedTarget 属性。此属性是对 target 的补充。当鼠标从一个元素离开并去往另一个元素时，其中一个元素就变成了 target，另一个就变成了 relatedTarget。</p>
+</blockquote>
+
       </fieldset>
       
-      <fieldset id='鼠标拖放事件'>
+      <fieldset id='_bUaGLe'>
       <legend>鼠标拖放事件</legend>
       
       </fieldset>
       
-      <fieldset id='Pointer-events'>
+      <fieldset id='_tQLiSH'>
       <legend>Pointer-events</legend>
       
       </fieldset>
       
-      <fieldset id='键盘'>
+      <fieldset id='_HcVGtN'>
       <legend>键盘</legend>
       
       </fieldset>
       
-      <fieldset id='滚动'>
+      <fieldset id='_7cyTw5'>
       <legend>滚动</legend>
       
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><a href="#鼠标事件">鼠标事件</a><br/></div><div style="margin-left:0em"><a href="#移动鼠标">移动鼠标</a><br/></div><div style="margin-left:0em"><a href="#鼠标拖放事件">鼠标拖放事件</a><br/></div><div style="margin-left:0em"><a href="#Pointer-events">Pointer-events</a><br/></div><div style="margin-left:0em"><a href="#键盘">键盘</a><br/></div><div style="margin-left:0em"><a href="#滚动">滚动</a><br/></div></div></body></html>
+      </div><div id="nav"><div style="margin-left:0em"><a href="#_eha8yE">鼠标事件</a><br/></div><div style="margin-left:0em"><a href="#_s67WLo">移动鼠标</a><br/></div><div style="margin-left:0em"><a href="#_bUaGLe">鼠标拖放事件</a><br/></div><div style="margin-left:0em"><a href="#_tQLiSH">Pointer-events</a><br/></div><div style="margin-left:0em"><a href="#_HcVGtN">键盘</a><br/></div><div style="margin-left:0em"><a href="#_7cyTw5">滚动</a><br/></div></div>
+</body></html>
