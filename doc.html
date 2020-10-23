@@ -190,16 +190,16 @@
         .task-list-item{list-style-type:none}
         .task-list-item+.task-list-item{margin-top:3px}
         .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
-        #page{width:calc(100% - 300px);margin-left:300px}
+        #page{width:calc(100% - 500px);margin-left:500px;overflow: hidden;}
         fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
         fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
-        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        #nav{background:rgb(255 255 255 / .7);padding:20px 10px 100px 20px;position:fixed;top:0;left:0;bottom:0;width:500px;overflow-y:auto;overflow-x: hidden;white-space:nowrap}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background-color:#79a5e8}
         @media print,(max-width:900px){
           #nav{display:none!important}
           #page{width:100%!important;margin-left:0!important}
-          fieldset{display:block!important;box-shadow:none!important}
+          fieldset{padding-top: 0 !important;padding-bottom: 0 !important;display:block!important;box-shadow:none!important}
           .toggle-hash-btn {display: none !important;}
         }
         .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
@@ -220,6 +220,7 @@
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
         .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+        iframe {border: 5px solid #999;margin:10px;width: 90%;min-height: 50px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -263,9 +264,8 @@
 <body>
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
-     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_eha8yE'>
+      <fieldset id='_mVe67E'>
       <legend>鼠标事件</legend>
       <h4 id="事件顺序">事件顺序</h4>
 <pre><code class="language-js">
@@ -300,33 +300,77 @@ type=<span class="hljs-string">&quot;button&quot;</span>&gt;
 
       </fieldset>
       
-      <fieldset id='_s67WLo'>
+      <fieldset id='_cquySI'>
       <legend>移动鼠标</legend>
       <h4 id="事件-mouseovermouseout，relatedtarget">事件 mouseover/mouseout，relatedTarget</h4>
 <blockquote>
 <p>这些事件很特别，因为它们具有 relatedTarget 属性。此属性是对 target 的补充。当鼠标从一个元素离开并去往另一个元素时，其中一个元素就变成了 target，另一个就变成了 relatedTarget。</p>
 </blockquote>
+<pre><code class="language-ts">container.onmouseover = container.onmouseout = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">if</span> (event.type === <span class="hljs-string">&quot;mouseover&quot;</span>) {
+    event.target.style.background = <span class="hljs-string">&quot;red&quot;</span>;
+  }
+  <span class="hljs-keyword">if</span> (event.type === <span class="hljs-string">&quot;mouseout&quot;</span>) {
+    event.target.style.background = <span class="hljs-string">&quot;&quot;</span>;
+  }
+};</code></pre>
+<iframe src="./root/移动鼠标_高亮DOM元素.html" width="100%" height="150"></iframe>
+
+<h4 id="跳过元素">跳过元素</h4>
+<p>访问者非常快地移动鼠标，那么某些 DOM 元素就可能被跳过</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;parent&quot;</span>&gt;</span>
+  parent
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;child&quot;</span>&gt;</span>child<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<pre><code class="language-ts"><span class="hljs-keyword">let</span> parent = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;parent&quot;</span>);
+parent.onmouseover = parent.onmouseout = parent.onmousemove = handler;</code></pre>
+<h4 id="当移动到一个子元素时-mouseout">当移动到一个子元素时 mouseout</h4>
+<p><img src="https://zh.javascript.info/article/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseover-bubble-nested.svg" alt="mouse"></p>
+<ul>
+<li><p>#child 位于 #parent 内部。#parent 元素上有 mouseover/out 的处理程序</p>
+</li>
+<li><p>如果你将鼠标从 #parent 移动到 #child，那么你会看到在 #parent 上有两个事件:</p>
+</li>
+<li><p>mouseout [target: parent]（离开 parent），然后 mouseover [target: child]（来到 child，冒泡）</p>
+</li>
+<li><p>视乎鼠标离开了#parent，阻扰我们的判断，为避免它，我们可以再程序中检查 relatedTarget，如果鼠标指针仍在元素内，则忽略此类事件</p>
+</li>
+<li><p>另外可以使用 mouseenter 和 mouseleave</p>
+</li>
+</ul>
+<h4 id="事件-mouseenter-和-mouseleave">事件 mouseenter 和 mouseleave</h4>
+<p>事件 mouseenter/mouseleave 类似于 mouseover/mouseout。它们在鼠标指针进入/离开元素时触发。</p>
+<p>但是有两个重要的区别：</p>
+<ol>
+<li>元素内部与后代之间的转换不会产生影响。</li>
+<li>事件 mouseenter/mouseleave 不会冒泡。</li>
+</ol>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;parent&quot;</span> <span class="hljs-attr">onmouseenter</span>=<span class="hljs-string">&quot;mouselog(event)&quot;</span> <span class="hljs-attr">onmouseleave</span>=<span class="hljs-string">&quot;mouselog(event)&quot;</span>&gt;</span>
+  parent
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;child&quot;</span>&gt;</span>child<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<h4 id="事件委托">事件委托</h4>
 
       </fieldset>
       
-      <fieldset id='_bUaGLe'>
+      <fieldset id='_XlUbmn'>
       <legend>鼠标拖放事件</legend>
       
       </fieldset>
       
-      <fieldset id='_tQLiSH'>
+      <fieldset id='_mutCQR'>
       <legend>Pointer-events</legend>
       
       </fieldset>
       
-      <fieldset id='_HcVGtN'>
+      <fieldset id='_ImfvP3'>
       <legend>键盘</legend>
       
       </fieldset>
       
-      <fieldset id='_7cyTw5'>
+      <fieldset id='_pAg8s3'>
       <legend>滚动</legend>
       
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><a href="#_eha8yE">鼠标事件</a><br/></div><div style="margin-left:0em"><a href="#_s67WLo">移动鼠标</a><br/></div><div style="margin-left:0em"><a href="#_bUaGLe">鼠标拖放事件</a><br/></div><div style="margin-left:0em"><a href="#_tQLiSH">Pointer-events</a><br/></div><div style="margin-left:0em"><a href="#_HcVGtN">键盘</a><br/></div><div style="margin-left:0em"><a href="#_7cyTw5">滚动</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><a href="#_mVe67E">鼠标事件</a><br/></div><div style="margin-left:0em"><a href="#_cquySI">移动鼠标</a><br/></div><div style="margin-left:0em"><a href="#_XlUbmn">鼠标拖放事件</a><br/></div><div style="margin-left:0em"><a href="#_mutCQR">Pointer-events</a><br/></div><div style="margin-left:0em"><a href="#_ImfvP3">键盘</a><br/></div><div style="margin-left:0em"><a href="#_pAg8s3">滚动</a><br/></div></div>
 </body></html>
